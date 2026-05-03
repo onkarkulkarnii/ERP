@@ -1,0 +1,83 @@
+@model IEnumerable<ERP.Models.Expense>
+@{ ViewBag.Title = "Expenses"; ViewBag.PageTitle = "Expenses"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-receipt text-orange me-2"></i>Expenses</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index")">Finance</a></li>
+            <li class="breadcrumb-item active">Expenses</li>
+        </ol></nav>
+    </div>
+    <a href="@Url.Action("CreateExpense")" class="btn btn-arcus"><i class="fa-solid fa-plus me-1"></i>Record Expense</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-3">
+                <select name="projectId" class="form-select form-select-sm">
+                    <option value="">All Projects</option>
+                    @foreach (System.Web.Mvc.SelectListItem p in ViewBag.Projects)
+                    {
+                        <option value="@p.Value" @(ViewBag.ProjectId?.ToString()==p.Value?"selected":"")>@p.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="category" class="form-select form-select-sm">
+                    <option value="">All Categories</option>
+                    @foreach (var c in ViewBag.Categories as string[])
+                    {
+                        <option value="@c" @(ViewBag.Category==c?"selected":"")>@c</option>
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-arcus"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
+                <a href="@Url.Action("Expenses")" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr><th>Date</th><th>Voucher</th><th>Project</th><th>Category</th><th>Description</th><th>Amount</th><th>Payment Mode</th><th>Approved By</th></tr>
+                </thead>
+                <tbody>
+                    @{ decimal total = 0; }
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="8" class="text-center text-muted py-4">No expenses found.</td></tr>
+                    }
+                    @foreach (var e in Model)
+                    {
+                        total += e.Amount;
+                        <tr>
+                            <td class="fs-xs">@e.ExpenseDate.ToString("dd MMM yy")</td>
+                            <td class="fs-xs text-muted">@e.VoucherNumber</td>
+                            <td class="fs-xs text-muted">@(e.ProjectName ?? "General")</td>
+                            <td><span class="badge bg-light text-dark border">@e.Category</span></td>
+                            <td class="fs-xs">@e.Description</td>
+                            <td class="fs-xs fw-700">&#8377;@e.Amount.ToString("N0")</td>
+                            <td class="fs-xs text-muted">@e.PaymentMode</td>
+                            <td class="fs-xs text-muted">@e.ApprovedBy</td>
+                        </tr>
+                    }
+                    @if (Model.Any())
+                    {
+                        <tr class="table-light">
+                            <td colspan="5" class="fw-700 text-end fs-xs">Total</td>
+                            <td class="fw-700 text-orange">&#8377;@total.ToString("N0")</td>
+                            <td colspan="2"></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

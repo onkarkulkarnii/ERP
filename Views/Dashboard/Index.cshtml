@@ -1,0 +1,223 @@
+@model ERP.Models.ViewModels.DashboardViewModel
+@{ ViewBag.Title = "Dashboard"; ViewBag.PageTitle = "Dashboard"; }
+
+<div class="row g-3 mb-4">
+    <!-- Stat 1 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon orange"><i class="fa-solid fa-diagram-project"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">@Model.ActiveProjects</div>
+                <div class="stat-label">Active Projects</div>
+                <div class="stat-sub"><span class="text-muted">@Model.TotalProjects total</span></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 2 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">@Model.ActiveEmployees</div>
+                <div class="stat-label">Active Employees</div>
+                <div class="stat-sub"><span class="text-muted">On payroll</span></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 3 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon green"><i class="fa-solid fa-clipboard-list"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">@Model.ActiveWorkOrders</div>
+                <div class="stat-label">Work Orders In Progress</div>
+                <div class="stat-sub"><span class="text-warning">@Model.PendingWorkOrders pending</span></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 4 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon teal"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">&#8377;@((Model.OutstandingReceivables/100000).ToString("N1"))L</div>
+                <div class="stat-label">Outstanding Receivables</div>
+                <div class="stat-sub"><span class="text-danger">&#8377;@((Model.OutstandingPayables/100000).ToString("N1"))L payables</span></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 5 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">@Model.OpenIncidents</div>
+                <div class="stat-label">Open Safety Incidents</div>
+                <div class="stat-sub"><a href="@Url.Action("Index","Safety")" class="text-orange fs-xs">View all</a></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 6 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon yellow"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">@Model.EquipmentInMaintenance</div>
+                <div class="stat-label">Equipment in Maintenance</div>
+                <div class="stat-sub"><a href="@Url.Action("Index","Equipment","",new{status="Maintenance"})" class="text-orange fs-xs">View all</a></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 7 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon purple"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">@Model.LowStockMaterials</div>
+                <div class="stat-label">Low Stock Alerts</div>
+                <div class="stat-sub"><a href="@Url.Action("Index","Material")" class="text-orange fs-xs">Check inventory</a></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 8 -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon indigo"><i class="fa-solid fa-calendar-check"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">@DateTime.Now.ToString("MMM yy")</div>
+                <div class="stat-label">Current Period</div>
+                <div class="stat-sub"><span class="text-muted">@DateTime.Now.ToString("dddd")</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Active Projects -->
+    <div class="col-xl-7">
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fa-solid fa-diagram-project text-orange me-2"></i>Active Projects</span>
+                <a href="@Url.Action("Index","Project")" class="btn btn-sm btn-outline-secondary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th>Client</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                                <th>Due</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.RecentProjects.Any())
+                            {
+                                <tr><td colspan="5" class="text-center text-muted py-3">No active projects.</td></tr>
+                            }
+                            @foreach (var p in Model.RecentProjects)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("Details","Project",new{id=p.ProjectId})" class="fw-700 text-dark">@p.ProjectName</a>
+                                        <div class="fs-xs text-muted">@p.ProjectCode</div>
+                                    </td>
+                                    <td class="fs-xs">@p.ClientName</td>
+                                    <td>
+                                        <span class="badge badge-@p.Status?.ToLower()">@p.Status</span>
+                                    </td>
+                                    <td style="min-width:100px">
+                                        <div class="progress mb-1">
+                                            <div class="progress-bar" style="width:@p.ProgressPercent%"></div>
+                                        </div>
+                                        <span class="fs-xs text-muted">@p.ProgressPercent%</span>
+                                    </td>
+                                    <td class="fs-xs @(p.IsOverdue ? "text-danger fw-700" : "text-muted")">
+                                        @(p.EndDate.HasValue ? p.EndDate.Value.ToString("dd MMM yy") : "--")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Work Orders -->
+    <div class="col-xl-5">
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fa-solid fa-clipboard-list text-orange me-2"></i>Pending Work Orders</span>
+                <a href="@Url.Action("Index","WorkOrder")" class="btn btn-sm btn-outline-secondary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr><th>Title</th><th>Project</th><th>Priority</th><th>Due</th></tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.RecentWorkOrders.Any())
+                            {
+                                <tr><td colspan="4" class="text-center text-muted py-3">No pending work orders.</td></tr>
+                            }
+                            @foreach (var wo in Model.RecentWorkOrders)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="fw-700 d-block" style="font-size:0.82rem">@wo.Title</span>
+                                        <span class="badge badge-@wo.Status?.ToLower() mt-1">@wo.Status</span>
+                                    </td>
+                                    <td class="fs-xs text-muted">@wo.ProjectName</td>
+                                    <td><span class="badge badge-@wo.Priority?.ToLower()">@wo.Priority</span></td>
+                                    <td class="fs-xs @(wo.IsOverdue ? "text-danger fw-700" : "text-muted")">
+                                        @(wo.EndDate.HasValue ? wo.EndDate.Value.ToString("dd MMM") : "--")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Safety Incidents -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <span><i class="fa-solid fa-helmet-safety text-orange me-2"></i>Recent Safety Incidents</span>
+                <a href="@Url.Action("Index","Safety")" class="btn btn-sm btn-outline-secondary">View All</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr><th>Code</th><th>Date</th><th>Type</th><th>Project</th><th>Description</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.RecentIncidents.Any())
+                            {
+                                <tr><td colspan="6" class="text-center text-muted py-3">No incidents recorded.</td></tr>
+                            }
+                            @foreach (var inc in Model.RecentIncidents)
+                            {
+                                <tr>
+                                    <td class="fs-xs fw-700">@inc.IncidentCode</td>
+                                    <td class="fs-xs">@inc.IncidentDate.ToString("dd MMM yy")</td>
+                                    <td><span class="badge bg-warning text-dark">@inc.IncidentType</span></td>
+                                    <td class="fs-xs text-muted">@inc.ProjectName</td>
+                                    <td class="fs-xs">@(inc.Description?.Length > 60 ? inc.Description.Substring(0, 60) + "…" : inc.Description)</td>
+                                    <td><span class="badge badge-@inc.Status?.ToLower().Replace(" ","")">@inc.Status</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

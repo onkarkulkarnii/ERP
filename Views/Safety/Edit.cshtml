@@ -1,0 +1,87 @@
+@model ERP.Models.SafetyIncident
+@{ ViewBag.Title = "Edit Incident"; ViewBag.PageTitle = "Edit Safety Incident"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-pen text-orange me-2"></i>Edit Incident — @Model.IncidentCode</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index")">Safety</a></li>
+            <li class="breadcrumb-item active">@Model.IncidentCode</li>
+        </ol></nav>
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit","Safety",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m=>m.IncidentId)
+    @Html.HiddenFor(m=>m.IncidentCode)
+    <div class="row g-3">
+        <div class="col-xl-8">
+            <div class="card mb-3">
+                <div class="card-header">Incident Information</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Incident Date *</label>
+                            @Html.TextBoxFor(m=>m.IncidentDate, "{0:yyyy-MM-dd}", new{@class="form-control",type="date"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Incident Time</label>
+                            @Html.TextBoxFor(m=>m.IncidentTime, new{@class="form-control",type="time"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            @Html.DropDownListFor(m=>m.Status, new SelectList(ViewBag.Statuses as string[], Model.Status), new{@class="form-select"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Incident Type</label>
+                            @Html.DropDownListFor(m=>m.IncidentType, new SelectList(ViewBag.IncidentTypes as string[], Model.IncidentType), "-- Select --", new{@class="form-select"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Project</label>
+                            @Html.DropDownListFor(m=>m.ProjectId, ViewBag.Projects as List<System.Web.Mvc.SelectListItem>, new{@class="form-select"})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Description</label>
+                            @Html.TextAreaFor(m=>m.Description, new{@class="form-control",rows=3})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Location</label>
+                            @Html.TextBoxFor(m=>m.Location, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Reported By</label>
+                            @Html.TextBoxFor(m=>m.ReportedBy, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Injured Person</label>
+                            @Html.TextBoxFor(m=>m.InjuredPerson, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Injury Type</label>
+                            @Html.TextBoxFor(m=>m.InjuryType, new{@class="form-control"})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Root Cause</label>
+                            @Html.TextAreaFor(m=>m.RootCause, new{@class="form-control",rows=2})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Corrective Action</label>
+                            @Html.TextAreaFor(m=>m.CorrectiveAction, new{@class="form-control",rows=2})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header">Actions</div>
+                <div class="card-body">
+                    <button type="submit" class="btn btn-arcus w-100 mb-2"><i class="fa-solid fa-floppy-disk me-1"></i>Update Incident</button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary w-100">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

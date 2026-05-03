@@ -121,6 +121,25 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\ContractorController.cs" />
+    <Compile Include="Controllers\MaterialController.cs" />
+    <Compile Include="Controllers\EquipmentController.cs" />
+    <Compile Include="Controllers\WorkOrderController.cs" />
+    <Compile Include="Controllers\FinanceController.cs" />
+    <Compile Include="Controllers\SafetyController.cs" />
+    <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\Contractor.cs" />
+    <Compile Include="Models\Material.cs" />
+    <Compile Include="Models\Equipment.cs" />
+    <Compile Include="Models\WorkOrder.cs" />
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\Expense.cs" />
+    <Compile Include="Models\SafetyIncident.cs" />
+    <Compile Include="Models\ViewModels\DashboardViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -146,6 +165,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\arcus.css" />
+    <Content Include="Database\ArcusInfra_DB.sql" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -177,10 +198,40 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Project\Index.cshtml" />
+    <Content Include="Views\Project\Create.cshtml" />
+    <Content Include="Views\Project\Edit.cshtml" />
+    <Content Include="Views\Project\Details.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\Employee\Create.cshtml" />
+    <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\Contractor\Index.cshtml" />
+    <Content Include="Views\Contractor\Create.cshtml" />
+    <Content Include="Views\Contractor\Edit.cshtml" />
+    <Content Include="Views\Material\Index.cshtml" />
+    <Content Include="Views\Material\Create.cshtml" />
+    <Content Include="Views\Material\Edit.cshtml" />
+    <Content Include="Views\Equipment\Index.cshtml" />
+    <Content Include="Views\Equipment\Create.cshtml" />
+    <Content Include="Views\Equipment\Edit.cshtml" />
+    <Content Include="Views\WorkOrder\Index.cshtml" />
+    <Content Include="Views\WorkOrder\Create.cshtml" />
+    <Content Include="Views\WorkOrder\Edit.cshtml" />
+    <Content Include="Views\Finance\Index.cshtml" />
+    <Content Include="Views\Finance\Invoices.cshtml" />
+    <Content Include="Views\Finance\CreateInvoice.cshtml" />
+    <Content Include="Views\Finance\Expenses.cshtml" />
+    <Content Include="Views\Finance\CreateExpense.cshtml" />
+    <Content Include="Views\Safety\Index.cshtml" />
+    <Content Include="Views\Safety\Create.cshtml" />
+    <Content Include="Views\Safety\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Models\ViewModels\" />
+    <Folder Include="Database\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

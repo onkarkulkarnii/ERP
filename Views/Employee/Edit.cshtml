@@ -1,0 +1,121 @@
+@model ERP.Models.Employee
+@{ ViewBag.Title = "Edit Employee"; ViewBag.PageTitle = "Edit Employee"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-user-pen text-orange me-2"></i>Edit Employee</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index")">Employees</a></li>
+            <li class="breadcrumb-item active">@Model.FullName</li>
+        </ol></nav>
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit","Employee",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m=>m.EmployeeId)
+    @Html.HiddenFor(m=>m.EmployeeCode)
+    <div class="row g-3">
+        <div class="col-xl-8">
+            <div class="card mb-3">
+                <div class="card-header">Personal Information &mdash; <span class="text-orange">@Model.EmployeeCode</span></div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">First Name *</label>
+                            @Html.TextBoxFor(m=>m.FirstName, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Last Name *</label>
+                            @Html.TextBoxFor(m=>m.LastName, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            @Html.TextBoxFor(m=>m.EmailAddress, new{@class="form-control",type="email"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone</label>
+                            @Html.TextBoxFor(m=>m.PhoneNumber, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date of Birth</label>
+                            @Html.TextBoxFor(m=>m.DateOfBirth, "{0:yyyy-MM-dd}", new{@class="form-control",type="date"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date of Joining</label>
+                            @Html.TextBoxFor(m=>m.DateOfJoining, "{0:yyyy-MM-dd}", new{@class="form-control",type="date"})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Address</label>
+                            @Html.TextAreaFor(m=>m.Address, new{@class="form-control",rows=2})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Emergency Contact</label>
+                            @Html.TextBoxFor(m=>m.EmergencyContact, new{@class="form-control"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header">Employment Details</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Designation</label>
+                            @Html.TextBoxFor(m=>m.Designation, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Department</label>
+                            @Html.DropDownListFor(m=>m.Department, new SelectList(ViewBag.Departments as List<string>, Model.Department), "-- Select --", new{@class="form-select"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Employment Type</label>
+                            @Html.DropDownListFor(m=>m.EmploymentType, new SelectList(ViewBag.EmploymentTypes as string[], Model.EmploymentType), "-- Select --", new{@class="form-select"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Basic Salary (₹)</label>
+                            @Html.TextBoxFor(m=>m.BasicSalary, new{@class="form-control",type="number",step="100"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            @Html.DropDownListFor(m=>m.Status, new SelectList(ViewBag.Statuses as string[], Model.Status), new{@class="form-select"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Bank & Identity</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Aadhaar No.</label>
+                            @Html.TextBoxFor(m=>m.AadhaarNumber, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">PAN No.</label>
+                            @Html.TextBoxFor(m=>m.PANNumber, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Bank Account No.</label>
+                            @Html.TextBoxFor(m=>m.BankAccountNo, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">IFSC Code</label>
+                            @Html.TextBoxFor(m=>m.IFSCCode, new{@class="form-control"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header">Actions</div>
+                <div class="card-body">
+                    <button type="submit" class="btn btn-arcus w-100 mb-2"><i class="fa-solid fa-floppy-disk me-1"></i>Update Employee</button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary w-100">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

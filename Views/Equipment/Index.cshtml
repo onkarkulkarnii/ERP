@@ -1,0 +1,75 @@
+@model IEnumerable<ERP.Models.Equipment>
+@{ ViewBag.Title = "Equipment"; ViewBag.PageTitle = "Equipment Management"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-truck-monster text-orange me-2"></i>Equipment</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active">Equipment Register</li></ol></nav>
+    </div>
+    <a href="@Url.Action("Create")" class="btn btn-arcus"><i class="fa-solid fa-plus me-1"></i>Add Equipment</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-control form-control-sm" placeholder="Search equipment, code…" />
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select form-select-sm">
+                    <option value="">All Status</option>
+                    @foreach (var s in new[]{"Available","InUse","Maintenance","Disposed"})
+                    {
+                        <option value="@s" @(ViewBag.Status==s?"selected":"")>@s</option>
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-arcus"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
+                <a href="@Url.Action("Index")" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr><th>Code</th><th>Equipment</th><th>Category</th><th>Make/Model</th><th>Purchase Value</th><th>Current Project</th><th>Ownership</th><th>Maintenance Due</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="10" class="text-center text-muted py-4">No equipment found.</td></tr>
+                    }
+                    @foreach (var eq in Model)
+                    {
+                        <tr>
+                            <td><span class="fw-700 text-orange">@eq.EquipmentCode</span></td>
+                            <td>
+                                <div class="fw-700">@eq.EquipmentName</div>
+                                @if (!string.IsNullOrEmpty(eq.RegistrationNumber))
+                                { <div class="fs-xs text-muted">Reg: @eq.RegistrationNumber</div> }
+                            </td>
+                            <td><span class="badge bg-light text-dark border">@eq.Category</span></td>
+                            <td class="fs-xs">@eq.Manufacturer @eq.Model</td>
+                            <td class="fs-xs">&#8377;@((eq.PurchaseValue/100000).ToString("N1"))L</td>
+                            <td class="fs-xs text-muted">@(eq.CurrentProjectName ?? "--")</td>
+                            <td><span class="badge @(eq.IsOwned?"bg-success":"bg-info") text-white">@eq.OwnershipLabel</span></td>
+                            <td class="fs-xs @(eq.IsMaintenanceDue?"text-danger fw-700":"text-muted")">
+                                @(eq.NextMaintenanceDue.HasValue ? eq.NextMaintenanceDue.Value.ToString("dd MMM yy") : "--")
+                                @if (eq.IsMaintenanceDue) { <i class="fa-solid fa-exclamation-triangle text-danger"></i> }
+                            </td>
+                            <td><span class="badge badge-@eq.Status?.ToLower()">@eq.Status</span></td>
+                            <td class="text-nowrap">
+                                <a href="@Url.Action("Edit",new{id=eq.EquipmentId})" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

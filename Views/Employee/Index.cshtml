@@ -1,0 +1,85 @@
+@model IEnumerable<ERP.Models.Employee>
+@{ ViewBag.Title = "Employees"; ViewBag.PageTitle = "Employees"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-users text-orange me-2"></i>Employees</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active">All Employees</li></ol></nav>
+    </div>
+    <a href="@Url.Action("Create")" class="btn btn-arcus"><i class="fa-solid fa-plus me-1"></i>Add Employee</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-control form-control-sm" placeholder="Search name, code, designation…" />
+            </div>
+            <div class="col-md-3">
+                <select name="department" class="form-select form-select-sm">
+                    <option value="">All Departments</option>
+                    @foreach (var d in ViewBag.Departments as List<string>)
+                    {
+                        <option value="@d" @(ViewBag.Department==d?"selected":"")>@d</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-select form-select-sm">
+                    <option value="">All Status</option>
+                    <option value="Active" @(ViewBag.Status=="Active"?"selected":"")>Active</option>
+                    <option value="Inactive" @(ViewBag.Status=="Inactive"?"selected":"")>Inactive</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-arcus"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
+                <a href="@Url.Action("Index")" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Code</th><th>Name</th><th>Designation</th><th>Department</th>
+                        <th>Phone</th><th>Type</th><th>Salary</th><th>Joining Date</th><th>Status</th><th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="10" class="text-center text-muted py-4">No employees found.</td></tr>
+                    }
+                    @foreach (var e in Model)
+                    {
+                        <tr>
+                            <td><span class="fw-700 text-orange">@e.EmployeeCode</span></td>
+                            <td>
+                                <div class="fw-700">@e.FullName</div>
+                                <div class="fs-xs text-muted">@e.EmailAddress</div>
+                            </td>
+                            <td class="fs-xs">@e.Designation</td>
+                            <td class="fs-xs"><span class="badge bg-light text-dark border">@e.Department</span></td>
+                            <td class="fs-xs">@e.PhoneNumber</td>
+                            <td class="fs-xs">@e.EmploymentType</td>
+                            <td class="fs-xs">&#8377;@e.BasicSalary.ToString("N0")</td>
+                            <td class="fs-xs">@(e.DateOfJoining.HasValue ? e.DateOfJoining.Value.ToString("dd MMM yy") : "--")</td>
+                            <td><span class="badge badge-@e.Status?.ToLower()">@e.Status</span></td>
+                            <td class="text-nowrap">
+                                <a href="@Url.Action("Edit",new{id=e.EmployeeId})" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                                <form method="post" action="@Url.Action("Delete",new{id=e.EmployeeId})" style="display:inline" onsubmit="return confirm('Deactivate this employee?')">
+                                    @Html.AntiForgeryToken()
+                                    <button class="btn btn-sm btn-outline-danger ms-1" title="Deactivate"><i class="fa-solid fa-user-slash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

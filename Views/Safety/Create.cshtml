@@ -1,0 +1,115 @@
+@model ERP.Models.SafetyIncident
+@{ ViewBag.Title = "Report Incident"; ViewBag.PageTitle = "Report Safety Incident"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-triangle-exclamation text-orange me-2"></i>Report Safety Incident</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index")">Safety</a></li>
+            <li class="breadcrumb-item active">Report Incident</li>
+        </ol></nav>
+    </div>
+</div>
+
+@using (Html.BeginForm("Create","Safety",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="row g-3">
+        <div class="col-xl-8">
+            <div class="card mb-3">
+                <div class="card-header">Incident Information</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Incident Code</label>
+                            @Html.TextBoxFor(m=>m.IncidentCode, new{@class="form-control",placeholder="INC-2026-007"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Incident Date *</label>
+                            @Html.TextBoxFor(m=>m.IncidentDate, "{0:yyyy-MM-dd}", new{@class="form-control",type="date"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Incident Time</label>
+                            @Html.TextBoxFor(m=>m.IncidentTime, new{@class="form-control",type="time"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Incident Type *</label>
+                            @Html.DropDownListFor(m=>m.IncidentType, new SelectList(ViewBag.IncidentTypes as string[]), "-- Select Type --", new{@class="form-select"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Project</label>
+                            @Html.DropDownListFor(m=>m.ProjectId, ViewBag.Projects as List<System.Web.Mvc.SelectListItem>, new{@class="form-select"})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Description *</label>
+                            @Html.TextAreaFor(m=>m.Description, new{@class="form-control",rows=3,placeholder="Describe what happened…"})
+                            @Html.ValidationMessageFor(m=>m.Description,"",new{@class="text-danger fs-xs"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Location</label>
+                            @Html.TextBoxFor(m=>m.Location, new{@class="form-control",placeholder="Floor, area, work zone…"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Reported By</label>
+                            @Html.TextBoxFor(m=>m.ReportedBy, new{@class="form-control"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header">Injury Details (if applicable)</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Injured Person</label>
+                            @Html.TextBoxFor(m=>m.InjuredPerson, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Injury Type</label>
+                            @Html.TextBoxFor(m=>m.InjuryType, new{@class="form-control",placeholder="Cut, Fracture, Burns…"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Investigation & Closure</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Root Cause</label>
+                            @Html.TextAreaFor(m=>m.RootCause, new{@class="form-control",rows=2})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Corrective Action</label>
+                            @Html.TextAreaFor(m=>m.CorrectiveAction, new{@class="form-control",rows=2})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            @Html.DropDownListFor(m=>m.Status, new SelectList(ViewBag.Statuses as string[]), new{@class="form-select"})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header">Actions</div>
+                <div class="card-body">
+                    <button type="submit" class="btn btn-arcus w-100 mb-2"><i class="fa-solid fa-floppy-disk me-1"></i>Submit Report</button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary w-100">Cancel</a>
+                </div>
+            </div>
+            <div class="card mt-3 border-warning">
+                <div class="card-header bg-warning text-dark"><i class="fa-solid fa-circle-info me-2"></i>Reporting Guide</div>
+                <div class="card-body fs-xs">
+                    <ul class="ps-3 mb-0">
+                        <li class="mb-1">Report incidents immediately, no matter how minor.</li>
+                        <li class="mb-1">Near misses are equally important — report them.</li>
+                        <li class="mb-1">Provide accurate time and location details.</li>
+                        <li>Root cause analysis helps prevent recurrence.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,81 @@
+@model IEnumerable<ERP.Models.Invoice>
+@{ ViewBag.Title = "Invoices"; ViewBag.PageTitle = "Invoices"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-file-invoice-dollar text-orange me-2"></i>Invoices</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index")">Finance</a></li>
+            <li class="breadcrumb-item active">Invoices</li>
+        </ol></nav>
+    </div>
+    <a href="@Url.Action("CreateInvoice")" class="btn btn-arcus"><i class="fa-solid fa-plus me-1"></i>New Invoice</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-3">
+                <select name="type" class="form-select form-select-sm">
+                    <option value="">All Types</option>
+                    <option value="ClientInvoice" @(ViewBag.Type=="ClientInvoice"?"selected":"")>Client Invoices</option>
+                    <option value="SupplierInvoice" @(ViewBag.Type=="SupplierInvoice"?"selected":"")>Supplier Invoices</option>
+                    <option value="ContractorBill" @(ViewBag.Type=="ContractorBill"?"selected":"")>Contractor Bills</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select form-select-sm">
+                    <option value="">All Status</option>
+                    @foreach (var s in new[]{"Pending","PartiallyPaid","Paid","Overdue","Cancelled"})
+                    {
+                        <option value="@s" @(ViewBag.Status==s?"selected":"")>@s</option>
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-arcus"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
+                <a href="@Url.Action("Invoices")" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr><th>Invoice No.</th><th>Type</th><th>Party</th><th>Project</th><th>Date</th><th>Due Date</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="10" class="text-center text-muted py-4">No invoices found.</td></tr>
+                    }
+                    @foreach (var inv in Model)
+                    {
+                        <tr>
+                            <td><span class="fw-700 text-orange">@inv.InvoiceNumber</span></td>
+                            <td>
+                                <span class="badge @(inv.InvoiceType=="ClientInvoice"?"bg-success":"bg-danger") text-white" style="font-size:0.68rem">
+                                    @(inv.InvoiceType=="ClientInvoice"?"Receivable":"Payable")
+                                </span>
+                                <div class="fs-xs text-muted">@inv.InvoiceType</div>
+                            </td>
+                            <td class="fs-xs fw-700">@inv.PartyName</td>
+                            <td class="fs-xs text-muted">@inv.ProjectName</td>
+                            <td class="fs-xs">@inv.InvoiceDate.ToString("dd MMM yy")</td>
+                            <td class="fs-xs @(inv.IsOverdue?"text-danger fw-700":"text-muted")">
+                                @(inv.DueDate.HasValue ? inv.DueDate.Value.ToString("dd MMM yy") : "--")
+                            </td>
+                            <td class="fs-xs">&#8377;@((inv.TotalAmount/100000).ToString("N2"))L</td>
+                            <td class="fs-xs text-success">&#8377;@((inv.PaidAmount/100000).ToString("N2"))L</td>
+                            <td class="fs-xs @(inv.BalanceAmount>0?"text-danger":"text-success")">&#8377;@((inv.BalanceAmount/100000).ToString("N2"))L</td>
+                            <td><span class="badge badge-@inv.Status?.ToLower().Replace(" ","")">@inv.Status</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

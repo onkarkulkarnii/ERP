@@ -1,0 +1,407 @@
+/* ===============================================================
+   Arcus Infra Construction - ERP Custom Styles
+   =============================================================== */
+
+:root {
+    --arcus-primary:   #f97316;
+    --arcus-secondary: #fb923c;
+    --arcus-dark:      #0f172a;
+    --arcus-sidebar:   #1e293b;
+    --arcus-text:      #334155;
+    --arcus-muted:     #64748b;
+    --arcus-border:    #e2e8f0;
+    --arcus-bg:        #f1f5f9;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--arcus-bg);
+    color: var(--arcus-text);
+    font-size: 0.9rem;
+}
+
+a { text-decoration: none; }
+
+/* ── Sidebar ──────────────────────────────────────────────── */
+.arcus-sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: var(--arcus-sidebar);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.arcus-brand {
+    padding: 1.25rem 1rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.arcus-brand-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--arcus-primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.arcus-brand-text strong {
+    display: block;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.arcus-brand-text small {
+    color: rgba(255,255,255,0.45);
+    font-size: 0.7rem;
+}
+
+.sidebar-section-label {
+    padding: 1rem 1rem 0.25rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.3);
+    font-weight: 700;
+}
+
+.sidebar-nav .nav-link {
+    padding: 0.55rem 1rem;
+    color: rgba(255,255,255,0.65);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    border-radius: 0;
+}
+
+.sidebar-nav .nav-link i {
+    width: 16px;
+    text-align: center;
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.4);
+    transition: color 0.15s;
+}
+
+.sidebar-nav .nav-link:hover {
+    color: white;
+    background: rgba(255,255,255,0.06);
+    border-left-color: rgba(249,115,22,0.5);
+}
+
+.sidebar-nav .nav-link:hover i,
+.sidebar-nav .nav-link.active i {
+    color: var(--arcus-primary);
+}
+
+.sidebar-nav .nav-link.active {
+    color: white;
+    background: rgba(249,115,22,0.15);
+    border-left-color: var(--arcus-primary);
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.35);
+    font-size: 0.7rem;
+    text-align: center;
+}
+
+/* ── Main layout ──────────────────────────────────────────── */
+.arcus-main {
+    margin-left: 260px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Top bar ──────────────────────────────────────────────── */
+.arcus-topbar {
+    background: white;
+    padding: 0 1.5rem;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--arcus-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.arcus-topbar .page-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--arcus-dark);
+    margin: 0;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.825rem;
+    color: var(--arcus-muted);
+}
+
+.topbar-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--arcus-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ── Page content ─────────────────────────────────────────── */
+.arcus-page {
+    padding: 1.5rem;
+    flex: 1;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.page-header h5 {
+    font-weight: 700;
+    color: var(--arcus-dark);
+    margin: 0;
+}
+
+.page-header .breadcrumb {
+    margin: 0;
+    font-size: 0.78rem;
+    background: transparent;
+    padding: 0;
+}
+
+/* ── Stat cards ───────────────────────────────────────────── */
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem;
+    border: 1px solid var(--arcus-border);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.stat-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.stat-icon.orange  { background: #fff7ed; color: #f97316; }
+.stat-icon.blue    { background: #eff6ff; color: #3b82f6; }
+.stat-icon.green   { background: #f0fdf4; color: #22c55e; }
+.stat-icon.purple  { background: #faf5ff; color: #a855f7; }
+.stat-icon.red     { background: #fef2f2; color: #ef4444; }
+.stat-icon.teal    { background: #f0fdfa; color: #14b8a6; }
+.stat-icon.yellow  { background: #fefce8; color: #eab308; }
+.stat-icon.indigo  { background: #eef2ff; color: #6366f1; }
+
+.stat-info .stat-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--arcus-dark);
+    line-height: 1;
+}
+
+.stat-info .stat-label {
+    font-size: 0.78rem;
+    color: var(--arcus-muted);
+    margin-top: 0.2rem;
+}
+
+.stat-info .stat-sub {
+    font-size: 0.72rem;
+    margin-top: 0.3rem;
+}
+
+/* ── Cards ────────────────────────────────────────────────── */
+.card {
+    border: 1px solid var(--arcus-border);
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+.card-header {
+    background: white;
+    border-bottom: 1px solid var(--arcus-border);
+    border-radius: 12px 12px 0 0 !important;
+    padding: 0.875rem 1.25rem;
+    font-weight: 600;
+    color: var(--arcus-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-body { padding: 1.25rem; }
+
+/* ── Tables ───────────────────────────────────────────────── */
+.table thead th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--arcus-muted);
+    font-weight: 700;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--arcus-border);
+    padding: 0.65rem 1rem;
+    white-space: nowrap;
+}
+
+.table tbody td {
+    padding: 0.7rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem;
+}
+
+.table tbody tr:last-child td { border-bottom: none; }
+.table tbody tr:hover { background: #f8fafc; }
+
+/* ── Badges ───────────────────────────────────────────────── */
+.badge { font-weight: 600; font-size: 0.72rem; padding: 0.3em 0.65em; border-radius: 6px; }
+
+.badge-planning      { background: #dbeafe; color: #1d4ed8; }
+.badge-active        { background: #dcfce7; color: #15803d; }
+.badge-onhold        { background: #fef9c3; color: #92400e; }
+.badge-completed     { background: #d1fae5; color: #065f46; }
+.badge-cancelled     { background: #fee2e2; color: #991b1b; }
+.badge-inprogress    { background: #e0f2fe; color: #075985; }
+.badge-pending       { background: #fef3c7; color: #92400e; }
+.badge-available     { background: #dcfce7; color: #15803d; }
+.badge-maintenance   { background: #fce7f3; color: #9d174d; }
+.badge-disposed      { background: #f3f4f6; color: #374151; }
+.badge-paid          { background: #d1fae5; color: #065f46; }
+.badge-overdue       { background: #fee2e2; color: #991b1b; }
+.badge-partiallypaid { background: #fef3c7; color: #92400e; }
+.badge-open          { background: #fef3c7; color: #92400e; }
+.badge-closed        { background: #dcfce7; color: #15803d; }
+.badge-underinvestigation { background: #e0f2fe; color: #075985; }
+.badge-high          { background: #fee2e2; color: #991b1b; }
+.badge-medium        { background: #fef9c3; color: #92400e; }
+.badge-low           { background: #dcfce7; color: #15803d; }
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn-arcus {
+    background: var(--arcus-primary);
+    border-color: var(--arcus-primary);
+    color: white;
+    font-weight: 600;
+    font-size: 0.825rem;
+}
+
+.btn-arcus:hover {
+    background: var(--arcus-secondary);
+    border-color: var(--arcus-secondary);
+    color: white;
+}
+
+.btn-sm { font-size: 0.75rem; padding: 0.3rem 0.65rem; }
+
+/* ── Forms ────────────────────────────────────────────────── */
+.form-label {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--arcus-text);
+    margin-bottom: 0.35rem;
+}
+
+.form-control, .form-select {
+    font-size: 0.875rem;
+    border-color: #cbd5e1;
+    border-radius: 8px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--arcus-primary);
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.15);
+}
+
+/* ── Progress bar ─────────────────────────────────────────── */
+.progress {
+    height: 6px;
+    border-radius: 3px;
+    background: #e2e8f0;
+}
+
+.progress-bar {
+    background: var(--arcus-primary);
+    border-radius: 3px;
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+.arcus-footer {
+    background: white;
+    border-top: 1px solid var(--arcus-border);
+    padding: 0.65rem 1.5rem;
+    font-size: 0.75rem;
+    color: var(--arcus-muted);
+    text-align: center;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 992px) {
+    .arcus-sidebar { display: none; }
+    .arcus-main    { margin-left: 0; }
+}
+
+/* ── Misc helpers ─────────────────────────────────────────── */
+.text-orange { color: var(--arcus-primary) !important; }
+.fw-700      { font-weight: 700; }
+.fs-xs       { font-size: 0.75rem; }
+
+.summary-number {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--arcus-dark);
+}
+
+.section-divider {
+    border: none;
+    border-top: 1px solid var(--arcus-border);
+    margin: 1rem 0;
+}
