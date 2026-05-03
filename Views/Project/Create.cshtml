@@ -1,0 +1,91 @@
+@model ERP.Models.Project
+@{ ViewBag.Title = "New Project"; ViewBag.PageTitle = "Create Project"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-plus text-orange me-2"></i>New Project</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index")">Projects</a></li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol></nav>
+    </div>
+</div>
+
+@using (Html.BeginForm("Create","Project",FormMethod.Post, new{@class="needs-validation"}))
+{
+    @Html.AntiForgeryToken()
+    <div class="row g-3">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header">Project Information</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Project Code *</label>
+                            @Html.TextBoxFor(m=>m.ProjectCode, new{@class="form-control",placeholder="PRJ-2026-001"})
+                            @Html.ValidationMessageFor(m=>m.ProjectCode,"",new{@class="text-danger fs-xs"})
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">Project Name *</label>
+                            @Html.TextBoxFor(m=>m.ProjectName, new{@class="form-control",placeholder="Enter project name"})
+                            @Html.ValidationMessageFor(m=>m.ProjectName,"",new{@class="text-danger fs-xs"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Client Name</label>
+                            @Html.TextBoxFor(m=>m.ClientName, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Project Type</label>
+                            @Html.DropDownListFor(m=>m.ProjectType, new SelectList(ViewBag.ProjectTypes as string[]), "-- Select Type --", new{@class="form-select"})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Location</label>
+                            @Html.TextBoxFor(m=>m.Location, new{@class="form-control",placeholder="City, State"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Start Date</label>
+                            @Html.TextBoxFor(m=>m.StartDate, "{0:yyyy-MM-dd}", new{@class="form-control",type="date"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">End Date</label>
+                            @Html.TextBoxFor(m=>m.EndDate, "{0:yyyy-MM-dd}", new{@class="form-control",type="date"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Budget (₹)</label>
+                            @Html.TextBoxFor(m=>m.Budget, new{@class="form-control",type="number",step="1000"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Contract Value (₹)</label>
+                            @Html.TextBoxFor(m=>m.ContractValue, new{@class="form-control",type="number",step="1000"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Project Manager</label>
+                            @Html.TextBoxFor(m=>m.ProjectManager, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Status</label>
+                            @Html.DropDownListFor(m=>m.Status, new SelectList(ViewBag.Statuses as string[]), new{@class="form-select"})
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Progress (%)</label>
+                            @Html.TextBoxFor(m=>m.ProgressPercent, new{@class="form-control",type="number",min=0,max=100})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Description</label>
+                            @Html.TextAreaFor(m=>m.Description, new{@class="form-control",rows=3})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header">Actions</div>
+                <div class="card-body">
+                    <button type="submit" class="btn btn-arcus w-100 mb-2"><i class="fa-solid fa-floppy-disk me-1"></i>Save Project</button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary w-100">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

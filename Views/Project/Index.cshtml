@@ -1,0 +1,93 @@
+@model IEnumerable<ERP.Models.Project>
+@{ ViewBag.Title = "Projects"; ViewBag.PageTitle = "Projects"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-diagram-project text-orange me-2"></i>Projects</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active">All Projects</li></ol></nav>
+    </div>
+    <a href="@Url.Action("Create")" class="btn btn-arcus"><i class="fa-solid fa-plus me-1"></i>New Project</a>
+</div>
+
+<!-- Filters -->
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-control form-control-sm" placeholder="Search name, code, client…" />
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select form-select-sm">
+                    <option value="">All Statuses</option>
+                    @foreach (var s in new[]{"Planning","Active","OnHold","Completed","Cancelled"})
+                    {
+                        <option value="@s" @(ViewBag.Status==s?"selected":"")>@s</option>
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-arcus"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
+                <a href="@Url.Action("Index")" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Project Name</th>
+                        <th>Client</th>
+                        <th>Type</th>
+                        <th>Manager</th>
+                        <th>Contract Value</th>
+                        <th>Progress</th>
+                        <th>Status</th>
+                        <th>End Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="10" class="text-center text-muted py-4">No projects found.</td></tr>
+                    }
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td><span class="fw-700 text-orange">@p.ProjectCode</span></td>
+                            <td>
+                                <a href="@Url.Action("Details",new{id=p.ProjectId})" class="fw-700 text-dark">@p.ProjectName</a>
+                                <div class="fs-xs text-muted"><i class="fa-solid fa-location-dot me-1"></i>@p.Location</div>
+                            </td>
+                            <td class="fs-xs">@p.ClientName</td>
+                            <td class="fs-xs">@p.ProjectType</td>
+                            <td class="fs-xs">@p.ProjectManager</td>
+                            <td class="fs-xs">&#8377;@((p.ContractValue/100000).ToString("N1"))L</td>
+                            <td style="min-width:110px">
+                                <div class="progress mb-1"><div class="progress-bar" style="width:@p.ProgressPercent%"></div></div>
+                                <span class="fs-xs text-muted">@p.ProgressPercent%</span>
+                            </td>
+                            <td><span class="badge badge-@p.Status?.ToLower()">@p.Status</span></td>
+                            <td class="fs-xs @(p.IsOverdue?"text-danger fw-700":"text-muted")">
+                                @(p.EndDate.HasValue ? p.EndDate.Value.ToString("dd MMM yy") : "--")
+                            </td>
+                            <td class="text-nowrap">
+                                <a href="@Url.Action("Details",new{id=p.ProjectId})" class="btn btn-sm btn-outline-secondary" title="Details"><i class="fa-solid fa-eye"></i></a>
+                                <a href="@Url.Action("Edit",new{id=p.ProjectId})" class="btn btn-sm btn-outline-primary ms-1" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                                <form method="post" action="@Url.Action("Delete",new{id=p.ProjectId})" style="display:inline" onsubmit="return confirm('Delete this project?')">
+                                    @Html.AntiForgeryToken()
+                                    <button class="btn btn-sm btn-outline-danger ms-1" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+@model ERP.Models.Project
+@{ ViewBag.Title = Model.ProjectName; ViewBag.PageTitle = "Project Details"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-diagram-project text-orange me-2"></i>@Model.ProjectName</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index")">Projects</a></li>
+            <li class="breadcrumb-item active">@Model.ProjectCode</li>
+        </ol></nav>
+    </div>
+    <div>
+        <a href="@Url.Action("Edit",new{id=Model.ProjectId})" class="btn btn-arcus me-2"><i class="fa-solid fa-pen me-1"></i>Edit</a>
+        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">Back</a>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-xl-8">
+        <div class="card mb-3">
+            <div class="card-header">Project Overview</div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="fs-xs text-muted">Project Code</div>
+                        <div class="fw-700 text-orange">@Model.ProjectCode</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="fs-xs text-muted">Status</div>
+                        <span class="badge badge-@Model.Status?.ToLower()">@Model.Status</span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="fs-xs text-muted">Type</div>
+                        <div class="fw-700">@Model.ProjectType</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="fs-xs text-muted">Client</div>
+                        <div class="fw-700">@Model.ClientName</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="fs-xs text-muted">Project Manager</div>
+                        <div class="fw-700">@Model.ProjectManager</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="fs-xs text-muted">Location</div>
+                        <div><i class="fa-solid fa-location-dot text-orange me-1"></i>@Model.Location</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="fs-xs text-muted">Start Date</div>
+                        <div>@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("dd MMM yyyy") : "--")</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="fs-xs text-muted">End Date</div>
+                        <div class="@(Model.IsOverdue?"text-danger fw-700":"")">
+                            @(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("dd MMM yyyy") : "--")
+                            @if (Model.IsOverdue) { <span class="badge bg-danger ms-1">Overdue</span> }
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="fs-xs text-muted mb-1">Progress</div>
+                        <div class="progress" style="height:10px">
+                            <div class="progress-bar" style="width:@Model.ProgressPercent%;height:10px"></div>
+                        </div>
+                        <div class="fs-xs text-muted mt-1">@Model.ProgressPercent% complete</div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="col-12">
+                            <div class="fs-xs text-muted">Description</div>
+                            <div>@Model.Description</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card mb-3">
+            <div class="card-header">Financials</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="fs-xs text-muted">Contract Value</div>
+                    <div class="summary-number text-orange">&#8377;@Model.ContractValue.ToString("N0")</div>
+                </div>
+                <hr class="section-divider" />
+                <div class="mb-2">
+                    <div class="fs-xs text-muted">Budget Allocated</div>
+                    <div class="fw-700">&#8377;@Model.Budget.ToString("N0")</div>
+                </div>
+                @if (Model.ContractValue > 0)
+                {
+                    <div class="mb-2">
+                        <div class="fs-xs text-muted">Margin (est.)</div>
+                        <div class="fw-700 text-success">&#8377;@((Model.ContractValue - Model.Budget).ToString("N0"))</div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Quick Links</div>
+            <div class="card-body">
+                <a href="@Url.Action("Index","WorkOrder",new{projectId=Model.ProjectId})" class="btn btn-outline-secondary w-100 mb-2 text-start">
+                    <i class="fa-solid fa-clipboard-list text-orange me-2"></i>Work Orders
+                </a>
+                <a href="@Url.Action("Expenses","Finance",new{projectId=Model.ProjectId})" class="btn btn-outline-secondary w-100 mb-2 text-start">
+                    <i class="fa-solid fa-receipt text-orange me-2"></i>Expenses
+                </a>
+                <a href="@Url.Action("Invoices","Finance",new{projectId=Model.ProjectId})" class="btn btn-outline-secondary w-100 text-start">
+                    <i class="fa-solid fa-file-invoice-dollar text-orange me-2"></i>Invoices
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

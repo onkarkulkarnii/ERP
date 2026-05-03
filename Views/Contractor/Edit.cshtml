@@ -1,0 +1,87 @@
+@model ERP.Models.Contractor
+@{ ViewBag.Title = "Edit Contractor"; ViewBag.PageTitle = "Edit Contractor"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-pen text-orange me-2"></i>Edit Contractor</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index")">Contractors</a></li>
+            <li class="breadcrumb-item active">@Model.ContractorCode</li>
+        </ol></nav>
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit","Contractor",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m=>m.ContractorId)
+    @Html.HiddenFor(m=>m.ContractorCode)
+    <div class="row g-3">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header">Contractor Details &mdash; <span class="text-orange">@Model.ContractorCode</span></div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Company Name *</label>
+                            @Html.TextBoxFor(m=>m.CompanyName, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Contact Person</label>
+                            @Html.TextBoxFor(m=>m.ContactPerson, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone</label>
+                            @Html.TextBoxFor(m=>m.PhoneNumber, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            @Html.TextBoxFor(m=>m.EmailAddress, new{@class="form-control",type="email"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Specialty</label>
+                            @Html.DropDownListFor(m=>m.SpecialtyType, new SelectList(ViewBag.Specialties as List<string>, Model.SpecialtyType), "-- Select --", new{@class="form-select"})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Address</label>
+                            @Html.TextAreaFor(m=>m.Address, new{@class="form-control",rows=2})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">License No.</label>
+                            @Html.TextBoxFor(m=>m.LicenseNumber, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">License Expiry</label>
+                            @Html.TextBoxFor(m=>m.LicenseExpiry, "{0:yyyy-MM-dd}", new{@class="form-control",type="date"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">GST No.</label>
+                            @Html.TextBoxFor(m=>m.GSTNumber, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Rating (1–5)</label>
+                            @Html.TextBoxFor(m=>m.Rating, new{@class="form-control",type="number",min=1,max=5})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            @Html.DropDownListFor(m=>m.Status, new SelectList(new[]{"Active","Inactive"}, Model.Status), new{@class="form-select"})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Remarks</label>
+                            @Html.TextAreaFor(m=>m.Remarks, new{@class="form-control",rows=2})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header">Actions</div>
+                <div class="card-body">
+                    <button type="submit" class="btn btn-arcus w-100 mb-2"><i class="fa-solid fa-floppy-disk me-1"></i>Update</button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary w-100">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

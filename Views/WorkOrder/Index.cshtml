@@ -1,0 +1,90 @@
+@model IEnumerable<ERP.Models.WorkOrder>
+@{ ViewBag.Title = "Work Orders"; ViewBag.PageTitle = "Work Orders"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-clipboard-list text-orange me-2"></i>Work Orders</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active">All Work Orders</li></ol></nav>
+    </div>
+    <a href="@Url.Action("Create")" class="btn btn-arcus"><i class="fa-solid fa-plus me-1"></i>New Work Order</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-3">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-control form-control-sm" placeholder="Search title, code…" />
+            </div>
+            <div class="col-md-3">
+                <select name="projectId" class="form-select form-select-sm">
+                    <option value="">All Projects</option>
+                    @foreach (System.Web.Mvc.SelectListItem p in ViewBag.Projects)
+                    {
+                        <option value="@p.Value" @(ViewBag.ProjectId?.ToString()==p.Value?"selected":"")>@p.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-select form-select-sm">
+                    <option value="">All Status</option>
+                    @foreach (var s in new[]{"Pending","InProgress","Completed","Cancelled"})
+                    {
+                        <option value="@s" @(ViewBag.Status==s?"selected":"")>@s</option>
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-arcus"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
+                <a href="@Url.Action("Index")" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr><th>Code</th><th>Title</th><th>Project</th><th>Contractor</th><th>Type</th><th>Contract Amt</th><th>Paid</th><th>Balance</th><th>End Date</th><th>Priority</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="12" class="text-center text-muted py-4">No work orders found.</td></tr>
+                    }
+                    @foreach (var wo in Model)
+                    {
+                        <tr>
+                            <td><span class="fw-700 text-orange">@wo.WorkOrderCode</span></td>
+                            <td>
+                                <div class="fw-700" style="max-width:180px">@wo.Title</div>
+                                <div class="fs-xs text-muted">@wo.AssignedTo</div>
+                            </td>
+                            <td class="fs-xs">
+                                <span class="text-muted">@wo.ProjectCode</span><br/>@wo.ProjectName
+                            </td>
+                            <td class="fs-xs text-muted">@(wo.ContractorName ?? "In-house")</td>
+                            <td class="fs-xs"><span class="badge bg-light text-dark border">@wo.WorkType</span></td>
+                            <td class="fs-xs">&#8377;@((wo.ContractAmount/100000).ToString("N1"))L</td>
+                            <td class="fs-xs text-success">&#8377;@((wo.PaidAmount/100000).ToString("N1"))L</td>
+                            <td class="fs-xs @(wo.BalanceAmount>0?"text-danger":"text-success")">&#8377;@((wo.BalanceAmount/100000).ToString("N1"))L</td>
+                            <td class="fs-xs @(wo.IsOverdue?"text-danger fw-700":"text-muted")">
+                                @(wo.EndDate.HasValue ? wo.EndDate.Value.ToString("dd MMM yy") : "--")
+                            </td>
+                            <td><span class="badge badge-@wo.Priority?.ToLower()">@wo.Priority</span></td>
+                            <td><span class="badge badge-@wo.Status?.ToLower()">@wo.Status</span></td>
+                            <td class="text-nowrap">
+                                <a href="@Url.Action("Edit",new{id=wo.WorkOrderId})" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                                <form method="post" action="@Url.Action("Delete",new{id=wo.WorkOrderId})" style="display:inline" onsubmit="return confirm('Cancel this work order?')">
+                                    @Html.AntiForgeryToken()
+                                    <button class="btn btn-sm btn-outline-danger ms-1" title="Cancel"><i class="fa-solid fa-xmark"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

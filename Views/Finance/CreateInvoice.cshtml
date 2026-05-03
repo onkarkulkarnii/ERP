@@ -1,0 +1,97 @@
+@model ERP.Models.Invoice
+@{ ViewBag.Title = "New Invoice"; ViewBag.PageTitle = "New Invoice"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-plus text-orange me-2"></i>New Invoice</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Invoices")">Invoices</a></li>
+            <li class="breadcrumb-item active">Create</li>
+        </ol></nav>
+    </div>
+</div>
+
+@using (Html.BeginForm("CreateInvoice","Finance",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="row g-3">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header">Invoice Details</div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Invoice Number *</label>
+                            @Html.TextBoxFor(m=>m.InvoiceNumber, new{@class="form-control",placeholder="INV-CLI-2026-001"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Invoice Type *</label>
+                            @Html.DropDownListFor(m=>m.InvoiceType, new SelectList(ViewBag.InvoiceTypes as string[]), "-- Select --", new{@class="form-select"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            @Html.DropDownListFor(m=>m.Status, new SelectList(ViewBag.Statuses as string[]), new{@class="form-select"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Party Name *</label>
+                            @Html.TextBoxFor(m=>m.PartyName, new{@class="form-control"})
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Project</label>
+                            @Html.DropDownListFor(m=>m.ProjectId, ViewBag.Projects as List<System.Web.Mvc.SelectListItem>, new{@class="form-select"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Invoice Date *</label>
+                            @Html.TextBoxFor(m=>m.InvoiceDate, "{0:yyyy-MM-dd}", new{@class="form-control",type="date"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Due Date</label>
+                            @Html.TextBoxFor(m=>m.DueDate, "{0:yyyy-MM-dd}", new{@class="form-control",type="date"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Paid Amount (₹)</label>
+                            @Html.TextBoxFor(m=>m.PaidAmount, new{@class="form-control",type="number",step="0.01"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Base Amount (₹) *</label>
+                            @Html.TextBoxFor(m=>m.Amount, new{@class="form-control",type="number",step="0.01",id="amount"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tax / GST Amount (₹)</label>
+                            @Html.TextBoxFor(m=>m.TaxAmount, new{@class="form-control",type="number",step="0.01",id="tax"})
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Total Amount (₹)</label>
+                            @Html.TextBoxFor(m=>m.TotalAmount, new{@class="form-control",id="total",@readonly="readonly"})
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Description</label>
+                            @Html.TextAreaFor(m=>m.Description, new{@class="form-control",rows=2})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-header">Actions</div>
+                <div class="card-body">
+                    <button type="submit" class="btn btn-arcus w-100 mb-2"><i class="fa-solid fa-floppy-disk me-1"></i>Save Invoice</button>
+                    <a href="@Url.Action("Invoices")" class="btn btn-outline-secondary w-100">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+<script>
+    function calcTotal(){
+        var a=parseFloat(document.getElementById('amount').value)||0;
+        var t=parseFloat(document.getElementById('tax').value)||0;
+        document.getElementById('total').value=(a+t).toFixed(2);
+    }
+    document.getElementById('amount').addEventListener('input',calcTotal);
+    document.getElementById('tax').addEventListener('input',calcTotal);
+</script>
+}

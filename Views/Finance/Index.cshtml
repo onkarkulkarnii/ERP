@@ -1,0 +1,104 @@
+@{ ViewBag.Title = "Finance"; ViewBag.PageTitle = "Finance Overview"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-chart-line text-orange me-2"></i>Finance Overview</h5>
+    </div>
+    <div>
+        <a href="@Url.Action("CreateInvoice")" class="btn btn-arcus me-2"><i class="fa-solid fa-plus me-1"></i>New Invoice</a>
+        <a href="@Url.Action("CreateExpense")" class="btn btn-outline-secondary"><i class="fa-solid fa-plus me-1"></i>Record Expense</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon teal"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div class="stat-info">
+                <div class="stat-value text-orange">&#8377;@(((decimal)ViewBag.TotalReceivables/100000).ToString("N1"))L</div>
+                <div class="stat-label">Outstanding Receivables</div>
+                <div class="stat-sub"><a href="@Url.Action("Invoices",new{type="ClientInvoice",status="Pending"})" class="fs-xs text-orange">View invoices</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon red"><i class="fa-solid fa-arrow-trend-down"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">&#8377;@(((decimal)ViewBag.TotalPayables/100000).ToString("N1"))L</div>
+                <div class="stat-label">Outstanding Payables</div>
+                <div class="stat-sub"><a href="@Url.Action("Invoices",new{type="ContractorBill",status="Pending"})" class="fs-xs text-orange">View bills</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon blue"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">&#8377;@(((decimal)ViewBag.TotalInvoiced/100000).ToString("N1"))L</div>
+                <div class="stat-label">Total Invoiced (All Time)</div>
+                <div class="stat-sub"><span class="text-success fs-xs">&#8377;@(((decimal)ViewBag.TotalCollected/100000).ToString("N1"))L collected</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon yellow"><i class="fa-solid fa-receipt"></i></div>
+            <div class="stat-info">
+                <div class="stat-value">&#8377;@(((decimal)ViewBag.TotalExpensesMonth/100000).ToString("N1"))L</div>
+                <div class="stat-label">Expenses This Month</div>
+                <div class="stat-sub"><a href="@Url.Action("Expenses")" class="fs-xs text-orange">View all</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <span><i class="fa-solid fa-file-invoice-dollar text-orange me-2"></i>Invoices</span>
+                <a href="@Url.Action("Invoices")" class="btn btn-sm btn-outline-secondary">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="@Url.Action("Invoices",new{type="ClientInvoice"})" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2">
+                        <span><i class="fa-solid fa-arrow-up text-success me-2"></i>Client Invoices</span>
+                        <span class="badge bg-light text-dark border">Receivables</span>
+                    </a>
+                    <a href="@Url.Action("Invoices",new{type="SupplierInvoice"})" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2">
+                        <span><i class="fa-solid fa-arrow-down text-danger me-2"></i>Supplier Invoices</span>
+                        <span class="badge bg-light text-dark border">Payables</span>
+                    </a>
+                    <a href="@Url.Action("Invoices",new{type="ContractorBill"})" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2">
+                        <span><i class="fa-solid fa-arrow-down text-danger me-2"></i>Contractor Bills</span>
+                        <span class="badge bg-light text-dark border">Payables</span>
+                    </a>
+                    <a href="@Url.Action("Invoices",new{status="Overdue"})" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2">
+                        <span><i class="fa-solid fa-clock text-warning me-2"></i>Overdue Invoices</span>
+                        <span class="badge badge-overdue">Action Required</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <span><i class="fa-solid fa-receipt text-orange me-2"></i>Expenses</span>
+                <a href="@Url.Action("Expenses")" class="btn btn-sm btn-outline-secondary">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    @foreach (var cat in new[]{"Labour","Material","Equipment","Transportation","Admin","Overhead"})
+                    {
+                        <a href="@Url.Action("Expenses",new{category=cat})" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2">
+                            <span class="fs-xs">@cat</span>
+                            <i class="fa-solid fa-chevron-right text-muted" style="font-size:0.7rem"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

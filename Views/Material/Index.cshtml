@@ -1,0 +1,79 @@
+@model IEnumerable<ERP.Models.Material>
+@{ ViewBag.Title = "Materials"; ViewBag.PageTitle = "Materials & Inventory"; }
+
+<div class="page-header">
+    <div>
+        <h5><i class="fa-solid fa-boxes-stacked text-orange me-2"></i>Materials & Inventory</h5>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active">Material Catalogue</li></ol></nav>
+    </div>
+    <a href="@Url.Action("Create")" class="btn btn-arcus"><i class="fa-solid fa-plus me-1"></i>Add Material</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body py-2">
+        <form method="get" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-control form-control-sm" placeholder="Search material, code…" />
+            </div>
+            <div class="col-md-3">
+                <select name="category" class="form-select form-select-sm">
+                    <option value="">All Categories</option>
+                    @foreach (var c in new[]{"Cement","Steel","Aggregates","Bricks","Blocks","Timber","Sand","Plumbing","Electrical","Finishing","Chemicals","Hardware"})
+                    {
+                        <option value="@c" @(ViewBag.Category==c?"selected":"")>@c</option>
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-sm btn-arcus"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
+                <a href="@Url.Action("Index")" class="btn btn-sm btn-outline-secondary ms-1">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr><th>Code</th><th>Material</th><th>Category</th><th>Unit</th><th>Unit Price</th><th>Current Stock</th><th>Min. Stock</th><th>Supplier</th><th>Stock Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="10" class="text-center text-muted py-4">No materials found.</td></tr>
+                    }
+                    @foreach (var m in Model)
+                    {
+                        <tr>
+                            <td><span class="fw-700 text-orange">@m.MaterialCode</span></td>
+                            <td>
+                                <div class="fw-700">@m.MaterialName</div>
+                                @if (!string.IsNullOrEmpty(m.HSNCode))
+                                { <div class="fs-xs text-muted">HSN: @m.HSNCode</div> }
+                            </td>
+                            <td><span class="badge bg-light text-dark border">@m.Category</span></td>
+                            <td class="fs-xs">@m.Unit</td>
+                            <td class="fs-xs">&#8377;@m.UnitPrice.ToString("N2")</td>
+                            <td class="fs-xs @(m.IsLowStock?"text-danger fw-700":"")">
+                                @m.CurrentStock.ToString("N2") @m.Unit
+                            </td>
+                            <td class="fs-xs text-muted">@m.MinStockLevel.ToString("N2")</td>
+                            <td class="fs-xs text-muted">@m.Supplier</td>
+                            <td>
+                                @if (m.IsLowStock)
+                                { <span class="badge badge-cancelled"><i class="fa-solid fa-exclamation-triangle me-1"></i>Low Stock</span> }
+                                else
+                                { <span class="badge badge-active">In Stock</span> }
+                            </td>
+                            <td class="text-nowrap">
+                                <a href="@Url.Action("Edit",new{id=m.MaterialId})" class="btn btn-sm btn-outline-primary" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
